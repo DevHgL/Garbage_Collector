@@ -1,7 +1,7 @@
 #ifndef GARBAGE_COLLECTOR_H
 #define GARBAGE_COLLECTOR_H
 
-#include <stddef.h>
+#include <stddef.h> // para a utilização do size-t
 
 void* malloc2(size_t size);
 void coleta();
