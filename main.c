@@ -1,24 +1,18 @@
 #include <stdio.h>
-#include "coletor.h"
+#include "libgarbage.h"
 
 int main() {
-    Objeto* obj1 = malloc2(10);
-    Objeto* obj2 = malloc2(20);
-
-    printf("Antes da atribuição de valor:\n");
+    int* ptr1 = malloc2(sizeof(int));
+    int* ptr2 = malloc2(sizeof(int));
+    
+    atrib2((void**)&ptr1, NULL);
+    atrib2((void**)&ptr2, NULL);
+    
     dump();
-
-    atrib2(obj1, obj2);
-    obj2->marcado = 1;
-
-    printf("\nApós a atribuição de valor:\n");
-    dump();
-
-    printf("\nRealizando a coleta de lixo...\n");
+    
     coleta();
-
-    printf("\nApós a coleta de lixo:\n");
+    
     dump();
-
+    
     return 0;
 }
