@@ -1,4 +1,3 @@
-
 #include "collector.h"
 #include <stdio.h>
 
