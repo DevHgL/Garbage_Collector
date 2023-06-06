@@ -1,25 +1,24 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include "coletor.h"
 
-int main(int argc, char const **argv)
-{
+int main() {
+    Objeto* obj1 = malloc2(10);
+    Objeto* obj2 = malloc2(20);
+
+    printf("Antes da atribuição de valor:\n");
     dump();
-    int *v = malloc2(sizeof(int));
-    *v = 10;
-    int *w = malloc2(sizeof(int));
+
+    atrib2(obj1, obj2);
+    obj2->marcado = 1;
+
+    printf("\nApós a atribuição de valor:\n");
     dump();
-    *w = 20;
-    atrib2(&v, w);
+
+    printf("\nRealizando a coleta de lixo...\n");
+    coleta();
+
+    printf("\nApós a coleta de lixo:\n");
     dump();
-    printf("Valor armazenado em v = %d\n\n", *v);
-    char *c = malloc2(sizeof(char));
-    *c = 'Z';
-    dump();
-    atrib2(&w, NULL);
-    dump();
-    atrib2(&v, NULL);
-    dump();
-    dump();
+
     return 0;
 }
