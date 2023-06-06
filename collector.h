@@ -5,7 +5,7 @@
 
 void* malloc2(size_t size);
 void coleta();
-void atrib2(void** ptr, void* ptr2);
+void atrib2(void** ptrX, void* ptrY);
 void dump();
 
 #endif  // GARBAGE_COLLECTOR_H

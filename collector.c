@@ -2,39 +2,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_OBJECTS 100
+#define MAX_OBJETOS 100
 
-static void* objects[MAX_OBJECTS];
-static int num_objects = 0;
+static void* objetos[MAX_OBJETOS];
+static int num_objetos = 0;
 
 void* malloc2(size_t size) {
     void* ptr = malloc(size);
     if (ptr != NULL) {
-        objects[num_objects++] = ptr;
+        objetos[num_objetos++] = ptr;
     }
     return ptr;
 }
 
 void coleta() {
-    for (int i = 0; i < num_objects; i++) {
-        free(objects[i]);
+    for (int i = 0; i < num_objetos; i++) {
+        free(objetos[i]);
     }
-    num_objects = 0;
+    num_objetos = 0;
 }
 
-void atrib2(void** ptr, void* ptr2) {
-    for (int i = 0; i < num_objects; i++) {
-        if (objects[i] == *ptr) {
-            objects[i] = ptr2;
+void atrib2(void** ptrX, void* ptrY) {
+    for (int i = 0; i < num_objetos; i++) {
+        if (objetos[i] == *ptrX) {
+            objetos[i] = ptrY;
             break;
         }
     }
-    *ptr = ptr2;
+    *ptrX = ptrY;
 }
 
 void dump() {
-    printf("Objetos alocados: %d\n", num_objects);
-    for (int i = 0; i < num_objects; i++) {
-        printf("Endereco: %p\n", objects[i]);
+    printf("Objetos alocados: %d\n", num_objetos);
+    for (int i = 0; i < num_objetos; i++) {
+        printf("Endereco: %p\n", objetos[i]);
     }
 }
