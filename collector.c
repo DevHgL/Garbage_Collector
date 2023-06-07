@@ -1,40 +1,85 @@
+#include<stdio.h>
+#include<stdlib.h>
 #include "collector.h"
-#include <stdio.h>
-#include <stdlib.h>
 
-#define MAX_OBJETOS 100
+// Variável global do tipo Heap, que será alterada ao decorrer do programa, quando elementos forem referenciados e dereferenciados
+Heap *listaMemoria = NULL;
 
-static void* objetos[MAX_OBJETOS];
-static int num_objetos = 0;
+// Função malloc2, realiza a alocação dinâmica e retorna o endereço
+void *malloc2(size_t tamanho){
+    Heap *novoEndereco = (Heap *)malloc(sizeof(Heap));
 
-void* malloc2(size_t size) {
-    void* ptr = malloc(size);
-    if (ptr != NULL) {
-        objetos[num_objetos++] = ptr;
-    }
-    return ptr;
+    novoEndereco->contagemReferencia = 1;
+    novoEndereco->endereco = malloc(tamanho);
+    novoEndereco->proximo = NULL; // O próximo sempre começa vazio e será preenchido dependendo se a memória já tiver um elemento inserido
+
+    // Se já tem, insere no próximo
+    if(listaMemoria != NULL) 
+        novoEndereco->proximo = listaMemoria;
+
+    // Se é vazia, recebe o novo nó alocado
+    listaMemoria = novoEndereco;
+
+    return listaMemoria->endereco; // Retorna o endereço da área alocada
 }
 
-void coleta() {
-    for (int i = 0; i < num_objetos; i++) {
-        free(objetos[i]);
-    }
-    num_objetos = 0;
-}
+void coleta(){
+    if(listaMemoria == NULL) return;
 
-void atrib2(void** ptrX, void* ptrY) {
-    for (int i = 0; i < num_objetos; i++) {
-        if (objetos[i] == *ptrX) {
-            objetos[i] = ptrY;
-            break;
+    Heap *anterior, *atual = listaMemoria;
+
+    while(atual && atual->contagemReferencia == 0){
+        listaMemoria = atual->proximo;
+        printf("Endereco: %p removido\n", atual->endereco);
+        free(atual);
+        atual = listaMemoria;
+    }
+
+    while(atual){
+        if(atual->contagemReferencia != 0){
+            anterior = atual;
+            atual = atual->proximo;
+        }
+        else{
+            anterior->proximo = atual->proximo;
+            printf("Endereco: %p removido\n", atual->endereco);
+            free(atual);
+            atual = anterior->proximo;
         }
     }
-    *ptrX = ptrY;
 }
 
-void dump() {
-    printf("Objetos alocados: %d\n", num_objetos);
-    for (int i = 0; i < num_objetos; i++) {
-        printf("Endereco: %p\n", objetos[i]);
+void atrib2(void **destino, void *origem){
+    Heap *atual = listaMemoria;
+
+    while(atual){
+        if(atual->endereco == *destino) atual->contagemReferencia = atual->contagemReferencia - 1;
+        if(atual->endereco == origem) atual->contagemReferencia = atual->contagemReferencia + 1;
+
+        atual = atual->proximo;
     }
+
+    *destino = origem;
+}
+
+void dump(){
+    if(listaMemoria == NULL){
+        printf("Heap Nula! Dump mal sucedido\n");
+        return;
+    }
+
+    Heap *atual = listaMemoria;
+    while(atual){
+        if(atual->contagemReferencia == 0){
+            // Contagem de referências chegou a 0, limpa a memória
+            printf("Endereco: %p, Referencias: %d\n", atual->endereco, atual->contagemReferencia);
+            atual = atual->proximo;
+            coleta();
+        }
+        else{
+            printf("Endereco: %p, Referencias: %d\n", atual->endereco, atual->contagemReferencia);
+            atual = atual->proximo;
+        }
+    }
+    printf("\n");
 }

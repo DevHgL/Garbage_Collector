@@ -1,30 +1,24 @@
-#include "collector.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include "collector.h"
 
-int main() {
-    printf("Antes da alocacao:\n");
+int main(){
+
     dump();
-
-    int* ptr1 = malloc2(sizeof(int));
-    *ptr1 = 10;
-
-    char* ptr2 = malloc2(sizeof(char));
-    *ptr2 = 'a';
-
-    printf("Apos alocacao:\n");
+    int *v = malloc2(sizeof(int));
+    *v = 10;
+    int *w = malloc2(sizeof(int));
     dump();
-
-    int* ptr3 = malloc2(sizeof(int));
-    *ptr3 = 20;
-
-    atrib2((void**)&ptr1, ptr3);
-        printf("Apos atribuicao.\n");
+    *w = 20;
+    atrib2(&v, w);
     dump();
-
-    coleta();
-
-    printf("Apos coleta.\n");
+    char *c = malloc2(sizeof(char));
+    *c = 'Z';
     dump();
-
+    atrib2(&w, NULL);
+    dump();
+    atrib2(&v, NULL);
+    dump();
+    dump();
     return 0;
 }
