@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "collector.h"
 
-int main(){
+int main(int argc, char **argv[]){
 
     int *v = malloc2(sizeof(int));
     *v = 10;
