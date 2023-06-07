@@ -53,9 +53,14 @@ void atrib2(void **destino, void *origem){
     Heap *atual = listaMemoria;
 
     while(atual){
-        if(atual->endereco == *destino) atual->contagemReferencia = atual->contagemReferencia - 1;
+        if(atual->endereco == *destino) {
+            atual->contagemReferencia = atual->contagemReferencia - 1;
+            if(atual->contagemReferencia == 0){
+             printf("Lixo removido! Endereco perdeu referencia!\n");
+             coleta();
+             }
+            }
         if(atual->endereco == origem) atual->contagemReferencia = atual->contagemReferencia + 1;
-
         atual = atual->proximo;
     }
 
@@ -74,7 +79,6 @@ void dump(){
             // Contagem de referências chegou a 0, limpa a memória
             printf("Endereco: %p, Referencias: %d\n", atual->endereco, atual->contagemReferencia);
             atual = atual->proximo;
-            coleta();
         }
         else{
             printf("Endereco: %p, Referencias: %d\n", atual->endereco, atual->contagemReferencia);

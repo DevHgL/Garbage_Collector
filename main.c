@@ -4,7 +4,6 @@
 
 int main(){
 
-    dump();
     int *v = malloc2(sizeof(int));
     *v = 10;
     int *w = malloc2(sizeof(int));
